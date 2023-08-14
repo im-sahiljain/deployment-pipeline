@@ -1,0 +1,48 @@
+name : Deploy Hello World App
+
+on:
+	push:
+		branches:
+			-main
+			
+jobs:
+	deploy:
+		run-on: ubuntu-latest
+		
+		steps:
+		-name: Checkout code
+		 uses: actions/checkout@v2
+		 
+		-name: Set up Python
+		 uses: actions/setup-python@v2
+		 with: 
+		 	python-version: 3.9
+		 	
+		 -name: Install dependencies
+		  run: |
+		   python -m pip install --upgradable pip
+		   pip install -r app/requiremnts.txt
+		   
+		   -name: Deploy
+		    run: |
+		     python app/app.py & sleep 5 
+		     
+		     -name: Test deployment
+		      run: |
+		       response=$(curl -sS https://localhost:5000)
+		       if ["$response" != "Hello, World!"]: then
+		       		echo "Deployment test failed"
+		       		exit 1
+		       	fi
+		     
+		     
+		     
+		     
+		     
+		     
+		     
+		     
+		     
+		     
+		     
+		     
